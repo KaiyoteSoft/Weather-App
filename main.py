@@ -5,7 +5,7 @@ from pygame.locals import *
 # from choose_weather import *
 import pprint
 import time
-
+import datetime
 
 try:
     import android
@@ -37,11 +37,12 @@ class Weather():
         wind_speed = (j_data["wind"]["speed"])
         # gust = (j_data["wind"]["gust"])
         date = (j_data["dt"])
-        time = time.ctime(date)
+        current_time = time.ctime(date)
         print(time)
         s_time = int(j_data["sys"]["sunrise"])
-        sunset_time = int(j_data["sys"]["sunset"])
-        #sunrise_time = time.asctime(s_time)
+        s_set_time = int(j_data["sys"]["sunset"])
+        sunrise_time = datetime.datetime.fromtimestamp(s_time).strftime('%H:%M:%S')
+        sunset_time = datetime.datetime.fromtimestamp(s_set_time).strftime('%H:%M:%S')
 
         self.description = weather_font_large.render("The name of the city is " + j_data["name"], True, RED)
         self.description_2 = wind_font.render("It is located in the country of " + j_data["sys"]["country"], True, RED)
@@ -50,8 +51,8 @@ class Weather():
         self.minimum_temp = weather_font.render("The minimum temperature will be {} degrees".format(min_temp), True, PURPLE)
         self.current_temperature = weather_font.render("The current temperature is {} degrees.".format(current_temp), True, LIGHT_BLUE)
         self.wind_description = wind_font.render("There is a wind blowing at {} mph ".format(wind_speed), True, LIGHT_GREEN)
-        self.day = weather_font.render("The date is {}".format(time), True, PINK)
-        self.sunrise_text = weather_font.render("The sun rises at {} and sets at {}".format(s_time, sunset_time), True, LIGHT_BLUE)
+        self.day = weather_font.render("The date is {}".format(current_time), True, PINK)
+        self.sunrise_text = weather_font.render("The sun rises at {} and sets at {}".format(sunrise_time, sunset_time), True, LIGHT_BLUE)
 
         self.description_rect = pygame.Rect(120, 10, 600, 100)
         self.description2_rect = pygame.Rect(60, 60, 60, 100)
@@ -92,6 +93,9 @@ WHITE = ((255, 255, 255))
 sorry_font = pygame.font.Font("fonts/ASTONISH.TTF", 150)
 
 palo_alto_pic = pygame.image.load("img/palo_alto.jpg")
+rain_pic = pygame.image.load("img/rain.jpg")
+sun_pic = pygame.image.load("img/sun.jpg")
+lightning_pic = pygame.image.load("img/lightning.jpg")
 weather_font = pygame.font.Font("fonts/animeace2_reg.ttf", 35)
 weather_font_large = pygame.font.Font("fonts/animeace2_reg.ttf", 45)
 wind_font = pygame.font.Font("fonts/animeace2_reg.ttf", 28)
@@ -124,6 +128,9 @@ try:
     title_2_rect = pygame.Rect(640, 80, 600, 100)
     picture_rect = pygame.Rect(100, 475, 900, 400)
     menu_rect = pygame.Rect(1040, 575, 40, 40)
+    sun_rect = pygame.Rect(400, 300, 300, 300)
+    rain_rect = pygame.Rect(1000, 400, 300, 300)
+    lightning_rect = pygame.Rect(550, 450, 300, 300)
 
 
     title = title_font.render("Weather", True, PURPLE)
@@ -167,6 +174,9 @@ try:
             windowSurface.blit(sc_text, sc_rect)
             windowSurface.blit(title, title_rect)
             windowSurface.blit(title_2, title_2_rect)
+            windowSurface.blit(lightning_pic, lightning_rect)
+            windowSurface.blit(sun_pic, sun_rect)
+            windowSurface.blit(rain_pic, rain_rect)
 
         if pa_button == False:
             windowSurface.fill((0,0,0))
